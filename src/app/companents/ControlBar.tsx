@@ -35,6 +35,7 @@ function ControlBar({ setTargetCoordinate, currentCoordinate }: MapProps) {
   const handleTargetCoordinate = (lat: number, lng: number) => {
     if (setTargetCoordinate) {
       setTargetCoordinate([lat, lng]);
+      localStorage.setItem("lastPoint", JSON.stringify([lat, lng]));
     }
   };
   // <----------/  ----->
@@ -74,6 +75,7 @@ function ControlBar({ setTargetCoordinate, currentCoordinate }: MapProps) {
         getData();
         if (setTargetCoordinate) {
           setTargetCoordinate([currentCoordinate[0], currentCoordinate[1]]);
+          localStorage.setItem("lastPoint", JSON.stringify([currentCoordinate[0], currentCoordinate[1]]));
         }
       }
     } catch (error) {
@@ -103,10 +105,10 @@ function ControlBar({ setTargetCoordinate, currentCoordinate }: MapProps) {
   // <----------/  ----->
 
   return (
-    <div className="fixed z-[999999] bottom-0 right-0 md:bottom-1/4 md:right-1 w-screen !important md:w-1/4 ">
+    <div className="fixed z-[999999] bottom-0 right-0 md:bottom-1/4 md:right-1 w-screen !important md:w-1/5 ">
       <div
         onClick={handleAddCoordinate}
-        className="m-4 p-1 md:p-2 border-2 border-solid  border-red-100 bg-amber-300 rounded-xl flex justify-center"
+        className="m-3 p-1 md:p-2 border-2 border-solid  border-red-100 bg-amber-300 rounded-xl flex justify-center"
       >
         <button>
           <div>
@@ -118,10 +120,10 @@ function ControlBar({ setTargetCoordinate, currentCoordinate }: MapProps) {
           <div>Koordinat Ekle</div>
         </button>
       </div>
-      <div className="m-4 p-0 md:p-1 border-2 border-solid  border-red-100 bg-amber-300 rounded-xl flex justify-center">
+      <div className="m-3 p-0 md:p-1 border-2 border-solid  border-red-100 bg-amber-300 rounded-xl flex justify-center">
        {dummyData.length} Kayıt
       </div>
-      <div className="md:max-h-[400px] overflow-y-auto overflow-x-auto hide-scrollbar">
+      <div className="md:max-h-[28rem] overflow-y-auto overflow-x-auto hide-scrollbar">
         <ul className="text-xs md:text-lg flex md:flex-col md:p-2">
           {dummyData
             .sort(
@@ -130,13 +132,27 @@ function ControlBar({ setTargetCoordinate, currentCoordinate }: MapProps) {
             )
             .map((item, index) => (
               <li
-                className="m-2 md:m-4 p-1 md:p-2 border-2 border-solid rounded-lg border-red-100 bg-slate-100"
+                className="m-4 p-1 md:p-2 border-2 border-solid rounded-lg border-red-100 bg-slate-100"
                 key={index}
               >
-                <div>
-                  <p>Lat: {parseFloat(item.lat).toFixed(4)} </p>
-                  <p>Lng: {parseFloat(item.lng).toFixed(4)}</p>
-                  <p>{item.datetime}</p>
+                
+                <div className="flex flex-3">
+                  <div className="flex-2 ">
+                    
+                  <p>Lat:</p>
+                  <p>Lng:</p>
+                  <p >Date:</p>
+                  <p>Time:</p>
+                  </div>
+                  <div  className="flex-1 text-end text-[10px] md:text-lg ">
+                    
+                  <p>{parseFloat(item.lat).toFixed(4)} </p>
+                  <p>{parseFloat(item.lng).toFixed(4)}</p>
+                  {/* gün.ay.yıl dönüştürme */}
+                  <p className="">{item.datetime.split('T')[0].split("-")[2]}.{item.datetime.split('T')[0].split("-")[1]}.{item.datetime.split('T')[0].split("-")[0]}</p>
+                  <p>{item.datetime.split('T')[1].split(".")[0]}</p>
+                  </div>
+                 
                 </div>
                 <div className="flex justify-around md:p-2">
                   <button

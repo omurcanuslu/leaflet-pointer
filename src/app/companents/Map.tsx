@@ -47,7 +47,11 @@ function MyComponent({ setCurrentCoordinate }: MapProps) {
 // <---------- Sayfa açıldığında ve 'targetCoordinate' değiştiğinde useMemo tetiklenip haritayı güncelliyor ---------------->
 const Map = () => {
   const [currentCoordinate, setCurrentCoordinate] = useState<[number, number, string] | null>(null);
-  const [targetCoordinate, setTargetCoordinate] = useState<[number, number]>([40.79498546816049, 29.40166870117188]);
+
+  // Sayfa
+  let lastPoint = localStorage.getItem("lastPoint");
+  let lastPointFormat: [number, number] | null = lastPoint ? JSON.parse(lastPoint) : null;
+  const [targetCoordinate, setTargetCoordinate] = useState<[number, number]>(lastPointFormat || [40.79498546816049, 29.40166870117188]);
 
   const mainMap = useMemo(
     () => (
